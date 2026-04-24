@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Head from "next/head";
 
 const ACCENT = "#BF5AF2";
@@ -96,6 +96,12 @@ function renderMd(text) {
 
 export default function Home() {
   const [lang, setLang] = useState("hr");
+
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js");
+    }
+  }, []);
   const [q, setQ] = useState("");
   const [resp, setResp] = useState({});
   const [loading, setLoading] = useState(false);
@@ -111,7 +117,8 @@ export default function Home() {
     if (!q.trim() || loading) return;
     setSub(true); setResp({}); setSel(null); setVerdict(null); setLoading(true);
     try {
-      const raw = await apiCall(SYSTEM_PROMPT + "\n\nPitanje: " + q);
+      const langInstruction = lang === "en" ? "IMPORTANT: Respond ONLY in English." : "VAŽNO: Odgovaraj ISKLJUČIVO na hrvatskom.";
+      const raw = await apiCall(SYSTEM_PROMPT + "\n\n" + langInstruction + "\n\nPitanje: " + q);
       const clean = raw.replace(/```json|```/g, "").trim();
       const json = JSON.parse(clean);
       const newResp = {
@@ -140,6 +147,13 @@ export default function Home() {
       <Head>
         <title>Viv's Savjetnik</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="Svako pitanje. Pet perspektiva. Jedna istina." />
+        <meta name="theme-color" content="#BF5AF2" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Viv's" />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="apple-touch-icon" href="/icons/icon-192.png" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
       </Head>
 
