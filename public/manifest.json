@@ -1,11 +1,11 @@
 {
-  "name": "Viv's Savjetnik",
-  "short_name": "Viv's",
-  "description": "Svako pitanje. Pet perspektiva. Jedna istina.",
+  "name": "HelpMeDecide.ai",
+  "short_name": "HelpMeDecide",
+  "description": "For the decisions that keep you up at night.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#F5F5F7",
-  "theme_color": "#BF5AF2",
+  "background_color": "#FAFAF7",
+  "theme_color": "#C9A84C",
   "orientation": "portrait",
   "icons": [
     {

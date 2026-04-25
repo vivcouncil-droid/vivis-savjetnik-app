@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
 import Head from "next/head";
 
-const ACCENT = "#BF5AF2";
-const ACCENT_DARK = "#9B3DC8";
+const ACCENT = "#C9A84C";
+const ACCENT_DARK = "#B8973D";
 
 const LANGS = {
   hr: {
-    badge: "Viv's · 5 Savjetnika",
-    title1: "Viv's",
-    title2: "Savjetnik",
-    subtitle: "Svako pitanje. Pet perspektiva. Jedna istina.",
+    badge: "HelpMeDecide · AI",
+    title1: "HelpMe",
+    title2: "Decide",
+    subtitle: "Za odluke koje te drže budnima noću.",
     placeholder: "Postavi svoje pitanje...",
     button: "Sazovi Savjetnike",
     buttonLoading: "Savjetnici razmišljaju...",
@@ -20,10 +20,10 @@ const LANGS = {
     verdictSub: "Sinteza svih perspektiva",
   },
   en: {
-    badge: "Viv's · 5 Advisors",
-    title1: "Viv's",
-    title2: "Council",
-    subtitle: "Every question. Five perspectives. One truth.",
+    badge: "HelpMeDecide · AI",
+    title1: "HelpMe",
+    title2: "Decide",
+    subtitle: "For the decisions that keep you up at night.",
     placeholder: "Ask your question...",
     button: "Summon the Advisors",
     buttonLoading: "Advisors are thinking...",
@@ -145,19 +145,19 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Viv's Savjetnik</title>
+        <title>HelpMeDecide.ai</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="description" content="Svako pitanje. Pet perspektiva. Jedna istina." />
-        <meta name="theme-color" content="#BF5AF2" />
+        <meta name="theme-color" content="#C9A84C" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="Viv's" />
+        <meta name="apple-mobile-web-app-title" content="HelpMeDecide" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/icons/icon-192.png" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
       </Head>
 
-      <div style={{ minHeight: "100vh", background: "#F5F5F7", fontFamily: "Inter, sans-serif" }}>
+      <div style={{ minHeight: "100vh", background: "#FAFAF7", fontFamily: "Inter, sans-serif" }}>
         <div style={{ maxWidth: 960, margin: "0 auto", padding: "56px 24px" }}>
 
           {/* Language Toggle */}
