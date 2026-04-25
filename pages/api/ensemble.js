@@ -1,5 +1,23 @@
 async function callClaude(context, questions, answers, lang) {
-  const prompt = `You are two expert advisors: The Philosopher and The Outsider.
+  const isHr = lang === "hr";
+  const prompt = isHr ? `Ti si dva vrhunska savjetnika: Filozof i Autsajder. Pišeš isključivo na hrvatskom jeziku, besprijekorno i prirodno.
+
+Kontekst odluke: ${context.userProfile}
+Rok: ${context.deadline}
+Prioriteti: ${context.coreValues?.join(", ")}
+Pitanja koja su postavljena: ${JSON.stringify(questions)}
+Korisnikovi odgovori: ${answers}
+
+Napiši duboku, nijansiranu analizu iz dviju perspektiva. Koristi **podebljano** za ključne pojmove.
+
+### 🧠 Filozof — Tvoj pravi razlog
+[400+ riječi. Svuci sve pretpostavke. Što je ovdje fundamentalno istinito? Sokratska dubina. Usklađenost s vrijednostima. Zašto iza odluke.]
+
+### 🌍 Autsajder — Pogled iz drugog kuta
+[400+ riječi. Analogije iz biologije, arhitekture, sporta, vojne strategije. Što bi netko iz potpuno drugog područja vidio ovdje?]
+
+Ton: Mudar, human, precizan. Piši kao da razgovaraš s prijateljem koji traži iskrean savjet.`
+  : `You are two expert advisors: The Philosopher and The Outsider.
 
 Decision context: ${context.userProfile}
 Deadline: ${context.deadline}
@@ -7,15 +25,15 @@ Core values: ${context.coreValues?.join(", ")}
 Questions asked: ${JSON.stringify(questions)}
 User's answers: ${answers}
 
-Generate deep, nuanced analysis from two perspectives:
+Generate deep, nuanced analysis from two perspectives. Use **bold** for key concepts.
 
-### 🧠 ${lang === "hr" ? "Filozof" : "Philosopher"} — ${lang === "hr" ? "Tvoj pravi razlog" : "The core truth"}
+### 🧠 Philosopher — The core truth
 [400+ words. Strip away assumptions. What is fundamentally true here? Socratic depth. Values alignment. The WHY behind the decision.]
 
-### 🌍 ${lang === "hr" ? "Autsajder" : "Outsider"} — ${lang === "hr" ? "Pogled iz drugog kuta" : "The bird's-eye view"}  
+### 🌍 Outsider — The bird's-eye view
 [400+ words. Cross-domain analogies from biology, architecture, sports, military strategy. What would someone from a completely different field see here?]
 
-Language: ${lang === "hr" ? "Croatian" : "English"}. Tone: Wise, empathetic, precise.`;
+Tone: Wise, empathetic, precise.`;
 
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
@@ -28,7 +46,25 @@ Language: ${lang === "hr" ? "Croatian" : "English"}. Tone: Wise, empathetic, pre
 }
 
 async function callOpenAI(context, questions, answers, lang) {
-  const prompt = `You are two expert advisors: The Executor and The Provocateur.
+  const isHr = lang === "hr";
+  const prompt = isHr ? `Ti si dva vrhunska savjetnika: Operativac i Provokator. Pišeš isključivo na hrvatskom jeziku, besprijekorno i prirodno.
+
+Kontekst odluke: ${context.userProfile}
+Rok: ${context.deadline}
+Prioriteti: ${context.coreValues?.join(", ")}
+Pitanja koja su postavljena: ${JSON.stringify(questions)}
+Korisnikovi odgovori: ${answers}
+
+Napiši oštru, logičku analizu iz dviju perspektiva. Koristi **podebljano** za ključne pojmove.
+
+### ⚡ Operativac — Tvoj sljedeći korak
+[400+ riječi. Konkretni numerirani koraci akcije. Što napraviti SADA. Potrebni resursi. Rokovi. Bez praznih priča.]
+
+### 🔥 Provokator — Testiranje stvarnosti
+[400+ riječi. Dovedi svaku pretpostavku u pitanje. Pronađi slijepe točke. Najgori scenariji. Đavlov advokat u najostrijoj formi.]
+
+Ton: Direktan, analitičan, izazovan. Ne uljepšavaj — reci istinu kako jest.`
+  : `You are two expert advisors: The Executor and The Provocateur.
 
 Decision context: ${context.userProfile}
 Deadline: ${context.deadline}
@@ -36,15 +72,15 @@ Core values: ${context.coreValues?.join(", ")}
 Questions asked: ${JSON.stringify(questions)}
 User's answers: ${answers}
 
-Generate sharp, logical analysis from two perspectives:
+Generate sharp, logical analysis from two perspectives. Use **bold** for key concepts.
 
-### ⚡ ${lang === "hr" ? "Operativac" : "Executor"} — ${lang === "hr" ? "Tvoj sljedeći korak" : "Your next move"}
+### ⚡ Executor — Your next move
 [400+ words. Concrete numbered action steps. What to do NOW. Resources needed. Timeline. Zero fluff.]
 
-### 🔥 ${lang === "hr" ? "Provokator" : "Provocateur"} — ${lang === "hr" ? "Testiranje stvarnosti" : "The reality check"}
+### 🔥 Provocateur — The reality check
 [400+ words. Challenge every assumption. Find blind spots. Worst case scenarios. Devil's advocate at its sharpest.]
 
-Language: ${lang === "hr" ? "Croatian" : "English"}. Tone: Direct, analytical, challenging.`;
+Tone: Direct, analytical, challenging.`;
 
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
@@ -57,7 +93,22 @@ Language: ${lang === "hr" ? "Croatian" : "English"}. Tone: Direct, analytical, c
 }
 
 async function callGemini(context, questions, answers, lang) {
-  const prompt = `You are The Visionary advisor.
+  const isHr = lang === "hr";
+  const prompt = isHr ? `Ti si vrhunski savjetnik Vizionar. Pišeš isključivo na hrvatskom jeziku, besprijekorno i prirodno.
+
+Kontekst odluke: ${context.userProfile}
+Rok: ${context.deadline}
+Prioriteti: ${context.coreValues?.join(", ")}
+Pitanja koja su postavljena: ${JSON.stringify(questions)}
+Korisnikovi odgovori: ${answers}
+
+Napiši ekspanzivnu vizionarsku analizu. Koristi **podebljano** za ključne pojmove.
+
+### 🚀 Vizionar — Puni potencijal
+[500+ riječi. Razmišljaj 10x veće. Što ako ova odluka otvori nešto eksponencijalno veće? Identificiraj točke poluge, susjedne prilike, multiplikatorske efekte. Kako izgleda najbolja moguća verzija ove odluke za 5 godina?]
+
+Ton: Ekspanzivan, optimističan, strateški. Inspiriraj korisnika da vidi više nego što misli da je moguće.`
+  : `You are The Visionary advisor.
 
 Decision context: ${context.userProfile}
 Deadline: ${context.deadline}
@@ -65,12 +116,12 @@ Core values: ${context.coreValues?.join(", ")}
 Questions asked: ${JSON.stringify(questions)}
 User's answers: ${answers}
 
-Generate expansive visionary analysis:
+Generate expansive visionary analysis. Use **bold** for key concepts.
 
-### 🚀 ${lang === "hr" ? "Vizionar" : "Visionary"} — ${lang === "hr" ? "Puni potencijal" : "The 10x path"}
+### 🚀 Visionary — The 10x path
 [500+ words. Think 10x bigger. What if this decision unlocked something exponentially larger? Identify leverage points, adjacent opportunities, multiplier effects. What does the best possible version of this decision look like in 5 years?]
 
-Language: ${lang === "hr" ? "Croatian" : "English"}. Tone: Expansive, optimistic, strategic.`;
+Tone: Expansive, optimistic, strategic.`;
 
   const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GOOGLE_API_KEY}`, {
     method: "POST",
@@ -140,7 +191,7 @@ ${isHr ? "[300 riječi. Sinteza svih perspektiva. Jedna jasna preporuka. Mudar, 
 ### ${isHr ? "Dugoročno (30-90 dana)" : "Long-term (30-90 days)"}
 - [3 concrete, specific actions]
 
-Language: ${isHr ? "Croatian" : "English"}. Tone: Premium consulting report. Authoritative, calm, precise.`;
+${isHr ? "Piši ISKLJUČIVO na hrvatskom jeziku, besprijekorno i prirodno. Ton: Premium konzultantski izvještaj. Autoritativan, smiren, precizan." : "Language: English. Tone: Premium consulting report. Authoritative, calm, precise."}`;
 
   const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GOOGLE_API_KEY}`, {
     method: "POST",
