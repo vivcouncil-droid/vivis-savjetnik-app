@@ -212,15 +212,15 @@ export default function Home() {
                   const r = resp[advisor.id], isAct = sel === advisor.id;
                   return (
                     <div key={advisor.id} onClick={() => r && setSel(isAct ? null : advisor.id)}
-                      style={{ background: "#fff", border: isAct ? `1px solid ${advisor.color}` : "0.5px solid rgba(0,0,0,0.1)", borderRadius: 14, padding: "16px 18px", cursor: r ? "pointer" : "default", transition: "all 0.2s", boxShadow: isAct ? `0 0 0 3px ${advisor.color}18` : "0 1px 4px rgba(0,0,0,0.06)", minHeight: 120, display: "flex", flexDirection: "column" }}>
+                      style={{ background: "#fff", border: `1px solid ${ACCENT}`, borderRadius: 14, padding: "16px 18px", cursor: r ? "pointer" : "default", transition: "all 0.2s", boxShadow: isAct ? `0 0 0 3px ${ACCENT}22` : "0 1px 4px rgba(0,0,0,0.06)", minHeight: 120, display: "flex", flexDirection: "column" }}>
                       <div style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 10 }}>
                         <span style={{ fontSize: 18 }}>{advisor.emoji}</span>
                         <div style={{ flex: 1 }}>
-                          <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 0.8, textTransform: "uppercase", color: advisor.color }}>{advisor.name}</div>
+                          <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 0.8, textTransform: "uppercase", color: ACCENT }}>{advisor.name}</div>
                           <div style={{ fontSize: 11, color: "#86868B", marginTop: 1 }}>{advisor.sub}</div>
                         </div>
                         {loading && !r && <div style={{ width: 7, height: 7, borderRadius: "50%", background: advisor.color, animation: "pulse 1s infinite", marginTop: 3 }} />}
-                        {r && <span style={{ color: "#C5C5C7", fontSize: 10, marginTop: 2 }}>{isAct ? "▲" : "▼"}</span>}
+                        {r && <span style={{ color: ACCENT, fontSize: 10, marginTop: 2 }}>{isAct ? "▲" : "▼"}</span>}
                       </div>
                       <div style={{ flex: 1, fontSize: 13, lineHeight: 1.6, color: isAct ? "#1D1D1F" : "#6E6E73" }}>
                         {loading && !r && <span style={{ color: "#C5C5C7", fontStyle: "italic" }}>{t.analyzing}</span>}
