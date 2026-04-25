@@ -72,7 +72,7 @@ Generate expansive visionary analysis:
 
 Language: ${lang === "hr" ? "Croatian" : "English"}. Tone: Expansive, optimistic, strategic.`;
 
-  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${process.env.GOOGLE_API_KEY}`, {
+  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GOOGLE_API_KEY}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { maxOutputTokens: 2000 } }),
@@ -142,7 +142,7 @@ ${isHr ? "[300 riječi. Sinteza svih perspektiva. Jedna jasna preporuka. Mudar, 
 
 Language: ${isHr ? "Croatian" : "English"}. Tone: Premium consulting report. Authoritative, calm, precise.`;
 
-  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${process.env.GOOGLE_API_KEY}`, {
+  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GOOGLE_API_KEY}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { maxOutputTokens: 6000 } }),
