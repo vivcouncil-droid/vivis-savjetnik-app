@@ -17,6 +17,7 @@ const LANGS = {
     waiting: "Čeka završetak analize...",
     thinking: "Vijeće se savjetuje...",
     footer: "Klikni na savjetnika za puni odgovor",
+    subheader: "Ujedinjena inteligencija najnaprednijih svjetskih AI modela.",
     verdictName: "Presuda",
     verdictSub: "Put do jasnoće",
     toggleQuick: "Brza analiza",
@@ -55,6 +56,7 @@ const LANGS = {
     waiting: "Waiting for analysis...",
     thinking: "The Council is deliberating...",
     footer: "Click on an advisor for the full answer",
+    subheader: "Unified intelligence from the world's leading AI models.",
     verdictName: "Verdict",
     verdictSub: "The path to clarity",
     toggleQuick: "Quick analysis",
@@ -285,8 +287,14 @@ export default function Home() {
   const goBlueprint = async () => {
     setDeepLoading(true); setDeepStep(4);
     try {
-      const bp = await apiCall("/api/deep", BLUEPRINT_PROMPT(deepContext.userProfile, deepContext, questions, answers, lang), 4000);
-      setBlueprint(bp);
+      const res = await fetch("/api/ensemble", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ context: deepContext, questions, answers, lang }),
+      });
+      const data = await res.json();
+      if (!res.ok || data.error) throw new Error(data.error || "Greška");
+      setBlueprint(data.blueprint);
     } catch (e) {
       setBlueprint("Greška: " + e.message);
     } finally {
@@ -346,7 +354,8 @@ export default function Home() {
             <h1 style={{ fontSize: "clamp(32px,5vw,56px)", fontWeight: 600, color: "#1D1D1F", letterSpacing: -1.5, lineHeight: 1.05, margin: "0 0 12px", fontFamily: "'Playfair Display', serif" }}>
               {t.title1}<br /><span style={{ color: ACCENT }}>{t.title2}</span>
             </h1>
-            <p style={{ fontSize: 17, color: "#86868B", margin: "0 0 28px" }}>{t.subtitle}</p>
+            <p style={{ fontSize: 17, color: "#86868B", margin: "0 0 10px" }}>{t.subtitle}</p>
+            <p style={{ fontSize: 12, color: "#C9A84C", margin: "0 0 28px", letterSpacing: 0.5, fontStyle: "italic" }}>{t.subheader}</p>
 
             <div style={{ display: "inline-flex", background: "#fff", border: "0.5px solid rgba(0,0,0,0.1)", borderRadius: 24, padding: 4, gap: 2, boxShadow: "0 1px 4px rgba(0,0,0,0.06)" }}>
               {["quick", "deep"].map((mode) => (
@@ -540,6 +549,9 @@ export default function Home() {
                       </div>
                       <p style={{ fontSize: 12, color: "#C5C5C7", textAlign: "center", margin: 0 }}>
                         {lang === "hr" ? "Blueprint se otvara u novom tabu — spremi ga kao PDF iz preglednika." : "Blueprint opens in a new tab — save it as PDF from your browser."}
+                      </p>
+                      <p style={{ fontSize: 11, color: "#D4B896", textAlign: "center", margin: "8px 0 0", fontStyle: "italic", letterSpacing: 0.3 }}>
+                        Synthesized by the collective intelligence of Claude 3.5, GPT‑4o, and Gemini 1.5 Pro.
                       </p>
                     </>
                   )}
