@@ -1,232 +1,134 @@
-async function callClaude(context, questions, answers, lang) {
-  const isHr = lang === "hr";
-  const prompt = isHr ? `Ti si dva vrhunska savjetnika: Filozof i Autsajder. Pišeš isključivo na hrvatskom jeziku, besprijekorno i prirodno.
-
-Kontekst odluke: ${context.userProfile}
-Rok: ${context.deadline}
-Prioriteti: ${context.coreValues?.join(", ")}
-Pitanja koja su postavljena: ${JSON.stringify(questions)}
-Korisnikovi odgovori: ${answers}
-
-Napiši duboku, nijansiranu analizu iz dviju perspektiva. Koristi **podebljano** za ključne pojmove.
-
-### 🧠 Filozof — Tvoj pravi razlog
-[400+ riječi. Svuci sve pretpostavke. Što je ovdje fundamentalno istinito? Sokratska dubina. Usklađenost s vrijednostima. Zašto iza odluke.]
-
-### 🌍 Autsajder — Pogled iz drugog kuta
-[400+ riječi. Analogije iz biologije, arhitekture, sporta, vojne strategije. Što bi netko iz potpuno drugog područja vidio ovdje?]
-
-Ton: Mudar, human, precizan. Piši kao da razgovaraš s prijateljem koji traži iskrean savjet.`
-  : `You are two expert advisors: The Philosopher and The Outsider.
-
-Decision context: ${context.userProfile}
-Deadline: ${context.deadline}
-Core values: ${context.coreValues?.join(", ")}
-Questions asked: ${JSON.stringify(questions)}
-User's answers: ${answers}
-
-Generate deep, nuanced analysis from two perspectives. Use **bold** for key concepts.
-
-### 🧠 Philosopher — The core truth
-[400+ words. Strip away assumptions. What is fundamentally true here? Socratic depth. Values alignment. The WHY behind the decision.]
-
-### 🌍 Outsider — The bird's-eye view
-[400+ words. Cross-domain analogies from biology, architecture, sports, military strategy. What would someone from a completely different field see here?]
-
-Tone: Wise, empathetic, precise.`;
-
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "x-api-key": process.env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
-    body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 2000, messages: [{ role: "user", content: prompt }] }),
-  });
-  const d = await res.json();
-  if (!res.ok || d.type === "error") throw new Error("Claude: " + (d.error?.message || res.status));
-  return d.content?.find(b => b.type === "text")?.text || "";
-}
-
-async function callClaudeExecutor(context, questions, answers, lang) {
-  const isHr = lang === "hr";
-  const prompt = isHr ? `Ti si dva vrhunska savjetnika: Operativac i Provokator. Pišeš isključivo na hrvatskom jeziku, besprijekorno i prirodno.
-
-Kontekst odluke: ${context.userProfile}
-Rok: ${context.deadline}
-Prioriteti: ${context.coreValues?.join(", ")}
-Pitanja koja su postavljena: ${JSON.stringify(questions)}
-Korisnikovi odgovori: ${answers}
-
-Napiši oštru, logičku analizu iz dviju perspektiva. Koristi **podebljano** za ključne pojmove.
-
-### ⚡ Operativac — Tvoj sljedeći korak
-[400+ riječi. Konkretni numerirani koraci akcije. Što napraviti SADA. Potrebni resursi. Rokovi. Bez praznih priča.]
-
-### 🔥 Provokator — Testiranje stvarnosti
-[400+ riječi. Dovedi svaku pretpostavku u pitanje. Pronađi slijepe točke. Najgori scenariji. Đavlov advokat u najostrijoj formi.]
-
-Ton: Direktan, analitičan, izazovan. Ne uljepšavaj — reci istinu kako jest.`
-  : `You are two expert advisors: The Executor and The Provocateur.
-
-Decision context: ${context.userProfile}
-Deadline: ${context.deadline}
-Core values: ${context.coreValues?.join(", ")}
-Questions asked: ${JSON.stringify(questions)}
-User's answers: ${answers}
-
-Generate sharp, logical analysis from two perspectives. Use **bold** for key concepts.
-
-### ⚡ Executor — Your next move
-[400+ words. Concrete numbered action steps. What to do NOW. Resources needed. Timeline. Zero fluff.]
-
-### 🔥 Provocateur — The reality check
-[400+ words. Challenge every assumption. Find blind spots. Worst case scenarios. Devil's advocate at its sharpest.]
-
-Tone: Direct, analytical, challenging.`;
-
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "x-api-key": process.env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
-    body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 2000, messages: [{ role: "user", content: prompt }] }),
-  });
-  const d = await res.json();
-  if (!res.ok || d.type === "error") throw new Error("Operativac/Provokator: " + (d.error?.message || res.status));
-  return d.content?.find(b => b.type === "text")?.text || "";
-}
-
-async function callGemini(context, questions, answers, lang) {
-  const isHr = lang === "hr";
-  const prompt = isHr ? `Ti si vrhunski savjetnik Vizionar. Pišeš isključivo na hrvatskom jeziku, besprijekorno i prirodno.
-
-Kontekst odluke: ${context.userProfile}
-Rok: ${context.deadline}
-Prioriteti: ${context.coreValues?.join(", ")}
-Pitanja koja su postavljena: ${JSON.stringify(questions)}
-Korisnikovi odgovori: ${answers}
-
-Napiši ekspanzivnu vizionarsku analizu. Koristi **podebljano** za ključne pojmove.
-
-### 🚀 Vizionar — Puni potencijal
-[500+ riječi. Razmišljaj 10x veće. Što ako ova odluka otvori nešto eksponencijalno veće? Identificiraj točke poluge, susjedne prilike, multiplikatorske efekte. Kako izgleda najbolja moguća verzija ove odluke za 5 godina?]
-
-Ton: Ekspanzivan, optimističan, strateški. Inspiriraj korisnika da vidi više nego što misli da je moguće.`
-  : `You are The Visionary advisor.
-
-Decision context: ${context.userProfile}
-Deadline: ${context.deadline}
-Core values: ${context.coreValues?.join(", ")}
-Questions asked: ${JSON.stringify(questions)}
-User's answers: ${answers}
-
-Generate expansive visionary analysis. Use **bold** for key concepts.
-
-### 🚀 Visionary — The 10x path
-[500+ words. Think 10x bigger. What if this decision unlocked something exponentially larger? Identify leverage points, adjacent opportunities, multiplier effects. What does the best possible version of this decision look like in 5 years?]
-
-Tone: Expansive, optimistic, strategic.`;
-
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "x-api-key": process.env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
-    body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 2000, messages: [{ role: "user", content: prompt }] }),
-  });
-  const d = await res.json();
-  if (!res.ok || d.type === "error") throw new Error("Vizionar (Claude): " + (d.error?.message || res.status));
-  return d.content?.find(b => b.type === "text")?.text || "";
-}
-
-async function callClaudeSynthesis(claudePerspectives, executorPerspectives, visionaryPerspective, context, lang) {
-  const isHr = lang === "hr";
-  const prompt = `You are the Master Synthesizer. Three of the world's most advanced AI systems have analyzed a decision from different angles. Your task is to synthesize their perspectives into a single, cohesive, premium strategic Blueprint document.
-
-THE DECISION: ${context.userProfile}
-DEADLINE: ${context.deadline}
-CORE VALUES: ${context.coreValues?.join(", ")}
-
-=== CLAUDE 3.5 SONNET PERSPECTIVES (Empathy, Ethics, Nuance) ===
-${claudePerspectives}
-
-=== GPT-4o PERSPECTIVES (Logic, Risk Analysis, Concrete Steps) ===
-${executorPerspectives}
-
-=== GEMINI 1.5 PRO PERSPECTIVE (Visionary Growth) ===
-${visionaryPerspective}
-
-Now synthesize everything into this exact Markdown structure:
-
-# The Blueprint
-
-## ${isHr ? "Strateška osnova" : "Strategic Foundation"}
-${isHr ? "[3-4 rečenice. Kristalno jasan sažetak situacije, rokova i prioriteta.]" : "[3-4 sentences. Crystal clear summary of the situation, deadline, and priorities.]"}
-
-## ${isHr ? "Konflikt Vijeća" : "The Council's Conflict"}
-${isHr ? "[2-3 paragrafa. Gdje se AI modeli NE slažu? Koji je temeljni trade-off koji korisnik mora razriješiti? Ovo je najvrednije poglavlje — iskreno i bez uljepšavanja.]" : "[2-3 paragraphs. Where do the AI models DISAGREE? What is the fundamental trade-off the user must resolve? This is the most valuable section — honest, not sugarcoated.]"}
-
-## ${isHr ? "Duboke Perspektive" : "Deep Perspectives"}
-
-### ⚡ ${isHr ? "Operativac" : "Executor"} — ${isHr ? "Tvoj sljedeći korak" : "Your next move"}
-[Insert Executor perspective from GPT-4o verbatim, cleaned up]
-
-### 🔥 ${isHr ? "Provokator" : "Provocateur"} — ${isHr ? "Testiranje stvarnosti" : "The reality check"}
-[Insert Provocateur perspective from GPT-4o verbatim, cleaned up]
-
-### 🌍 ${isHr ? "Autsajder" : "Outsider"} — ${isHr ? "Pogled iz drugog kuta" : "The bird's-eye view"}
-[Insert Outsider perspective from Claude verbatim, cleaned up]
-
-### 🚀 ${isHr ? "Vizionar" : "Visionary"} — ${isHr ? "Puni potencijal" : "The 10x path"}
-[Insert Visionary perspective from Gemini verbatim, cleaned up]
-
-### 🧠 ${isHr ? "Filozof" : "Philosopher"} — ${isHr ? "Tvoj pravi razlog" : "The core truth"}
-[Insert Philosopher perspective from Claude verbatim, cleaned up]
-
-## ⚖️ ${isHr ? "Presuda" : "Final Verdict"}
-${isHr ? "[300 riječi. Sinteza svih perspektiva. Jedna jasna preporuka. Mudar, human, definitivan ton.]" : "[300 words. Synthesis of all perspectives. One clear recommendation. Wise, human, definitive tone.]"}
-
-## ${isHr ? "Akcijski Plan" : "Action Plan"}
-
-### ${isHr ? "Sljedeća 24 sata" : "Next 24 hours"}
-- [3 concrete, specific actions]
-
-### ${isHr ? "Sljedećih 7 dana" : "Next 7 days"}
-- [3 concrete, specific actions]
-
-### ${isHr ? "Dugoročno (30-90 dana)" : "Long-term (30-90 days)"}
-- [3 concrete, specific actions]
-
-${isHr ? "Piši ISKLJUČIVO na hrvatskom jeziku, besprijekorno i prirodno. Ton: Premium konzultantski izvještaj. Autoritativan, smiren, precizan." : "Language: English. Tone: Premium consulting report. Authoritative, calm, precise."}`;
-
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "x-api-key": process.env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
-    body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 6000, messages: [{ role: "user", content: prompt }] }),
-  });
-  const d = await res.json();
-  if (!res.ok || d.type === "error") throw new Error("Claude Synthesis: " + (d.error?.message || res.status));
-  return d.content?.find(b => b.type === "text")?.text || "";
-}
+export const config = { maxDuration: 60 };
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).end();
   const { context, questions, answers, lang } = req.body;
   if (!context || !answers) return res.status(400).json({ error: "Nedostaju podaci" });
 
+  const isHr = lang === "hr";
+
+  const prompt = isHr ? `Ti si vijeće od 5 vrhunskih savjetnika koji zajedno analiziraju jednu važnu odluku. Pišeš isključivo na hrvatskom jeziku, besprijekorno i prirodno.
+
+KONTEKST ODLUKE: ${context.userProfile}
+ROK: ${context.deadline || "nije određen"}
+PRIORITETI: ${context.coreValues?.join(", ") || "nisu navedeni"}
+PITANJA VIJEĆA: ${JSON.stringify(questions)}
+ODGOVORI KORISNIKA: ${answers}
+
+Generiraj kompletan Blueprint dokument u Markdown formatu. Budi detaljan, konkretan i human.
+
+# The Blueprint
+
+## Strateška osnova
+[3-4 rečenice. Kristalno jasan sažetak situacije, rokova i prioriteta korisnika.]
+
+## Konflikt Vijeća
+[2-3 paragrafa. Gdje se savjetnici NE slažu? Koji je temeljni trade-off koji korisnik mora razriješiti? Budi iskren, ne uljepšavaj.]
+
+## Perspektive Vijeća
+
+### ⚡ Operativac — Tvoj sljedeći korak
+[400+ riječi. Konkretni numerirani koraci. Što napraviti SADA. Resursi, rokovi, akcija. Koristi **bold** za ključne pojmove.]
+
+### 🔥 Provokator — Testiranje stvarnosti
+[400+ riječi. Dovedi svaku pretpostavku u pitanje. Pronađi slijepe točke. Najgori scenariji. Budi oštar ali konstruktivan. Koristi **bold**.]
+
+### 🌍 Autsajder — Pogled iz drugog kuta
+[400+ riječi. Analogije iz biologije, arhitekture, sporta, vojne strategije. Svježa perspektiva izvana. Koristi **bold**.]
+
+### 🚀 Vizionar — Puni potencijal
+[400+ riječi. Razmišljaj 10x veće. Točke poluge, multiplikatorski efekti, dugoročne prilike. Što ako ova odluka otvori nešto eksponencijalno veće? Koristi **bold**.]
+
+### 🧠 Filozof — Tvoj pravi razlog
+[400+ riječi. Svuci pretpostavke. Što je fundamentalno istinito ovdje? Usklađenost s vrijednostima. Zašto iza odluke. Koristi **bold**.]
+
+## ⚖️ Presuda
+[300 riječi. Sinteza svih perspektiva. Jedna jasna preporuka. Mudar, human, definitivan ton.]
+
+## Akcijski Plan
+
+### Sljedeća 24 sata
+- [3 konkretne akcije]
+
+### Sljedećih 7 dana
+- [3 konkretne akcije]
+
+### Dugoročno (30-90 dana)
+- [3 konkretne akcije]`
+
+  : `You are a council of 5 elite advisors jointly analysing one important decision. Write exclusively in fluent, natural English.
+
+DECISION CONTEXT: ${context.userProfile}
+DEADLINE: ${context.deadline || "not specified"}
+PRIORITIES: ${context.coreValues?.join(", ") || "not specified"}
+COUNCIL QUESTIONS: ${JSON.stringify(questions)}
+USER ANSWERS: ${answers}
+
+Generate a complete Blueprint document in Markdown format. Be detailed, concrete, and human.
+
+# The Blueprint
+
+## Strategic Foundation
+[3-4 sentences. Crystal clear summary of the situation, deadline and priorities.]
+
+## The Council's Conflict
+[2-3 paragraphs. Where do the advisors DISAGREE? What is the fundamental trade-off the user must resolve? Be honest, don't sugarcoat.]
+
+## Council Perspectives
+
+### ⚡ Executor — Your next move
+[400+ words. Concrete numbered action steps. What to do NOW. Resources, timelines, action. Use **bold** for key concepts.]
+
+### 🔥 Provocateur — The reality check
+[400+ words. Challenge every assumption. Find blind spots. Worst-case scenarios. Be sharp but constructive. Use **bold**.]
+
+### 🌍 Outsider — The bird's-eye view
+[400+ words. Analogies from biology, architecture, sports, military strategy. Fresh external perspective. Use **bold**.]
+
+### 🚀 Visionary — The 10x path
+[400+ words. Think 10x bigger. Leverage points, multiplier effects, long-term opportunities. Use **bold**.]
+
+### 🧠 Philosopher — The core truth
+[400+ words. Strip away assumptions. What is fundamentally true here? Values alignment. The WHY. Use **bold**.]
+
+## ⚖️ Final Verdict
+[300 words. Synthesis of all perspectives. One clear recommendation. Wise, human, definitive tone.]
+
+## Action Plan
+
+### Next 24 hours
+- [3 concrete actions]
+
+### Next 7 days
+- [3 concrete actions]
+
+### Long-term (30-90 days)
+- [3 concrete actions]`;
+
   try {
-    const [claudeResp, executorResp, visionaryResp] = await Promise.all([
-      callClaude(context, questions, answers, lang),
-      callClaudeExecutor(context, questions, answers, lang),
-      callGemini(context, questions, answers, lang),
-    ]);
-
-    const blueprint = await callClaudeSynthesis(claudeResp, executorResp, visionaryResp, context, lang);
-
-    return res.status(200).json({
-      blueprint,
-      models: {
-        philosopher_outsider: claudeResp,
-        executor_provocateur: executorResp,
-        visionary: visionaryResp,
+    const res2 = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": process.env.ANTHROPIC_API_KEY,
+        "anthropic-version": "2023-06-01",
       },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 6000,
+        messages: [{ role: "user", content: prompt }],
+      }),
     });
+
+    const data = await res2.json();
+    if (!res2.ok || data.type === "error") {
+      return res.status(500).json({ error: data?.error?.message || "API greška" });
+    }
+    const blueprint = data.content?.find((b) => b.type === "text")?.text;
+    if (!blueprint) return res.status(500).json({ error: "Prazan odgovor" });
+
+    return res.status(200).json({ blueprint });
   } catch (err) {
-    console.error("Ensemble error:", err);
     return res.status(500).json({ error: err.message });
   }
 }
