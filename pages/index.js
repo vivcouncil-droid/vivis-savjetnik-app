@@ -17,7 +17,7 @@ const LANGS = {
     waiting: "Čeka završetak analize...",
     thinking: "Vijeće se savjetuje...",
     footer: "Klikni na savjetnika za puni odgovor",
-    verdictSub: "Sinteza svih perspektiva",
+    verdictSub: "Put do jasnoće",
   },
   en: {
     badge: "HelpMeDecide · AI",
@@ -31,24 +31,24 @@ const LANGS = {
     waiting: "Waiting for analysis...",
     thinking: "The council is deliberating...",
     footer: "Click on an advisor for the full answer",
-    verdictSub: "Synthesis of all perspectives",
+    verdictSub: "The path to clarity",
   },
 };
 
 const ADVISORS = {
   hr: [
-    { id: "a1", name: "Akcionar",   sub: "Što napraviti odmah",     emoji: "⚡", color: "#BF5AF2" },
-    { id: "a2", name: "Provokator", sub: "Što može poći krivo",     emoji: "🔥", color: "#FF375F" },
-    { id: "a3", name: "Autsajder",  sub: "Pogled izvana",           emoji: "🌍", color: "#30B0C7" },
-    { id: "a4", name: "Vizionar",   sub: "Razmišljaj 10x veće",     emoji: "🚀", color: "#34C759" },
-    { id: "a5", name: "Filozof",    sub: "Što je zapravo istinito", emoji: "🧠", color: "#FF9F0A" },
+    { id: "a1", name: "Operativac",  sub: "Tvoj sljedeći korak",     emoji: "⚡", color: "#C9A84C" },
+    { id: "a2", name: "Provokator",  sub: "Testiranje stvarnosti",   emoji: "🔥", color: "#C9A84C" },
+    { id: "a3", name: "Autsajder",   sub: "Pogled iz drugog kuta",   emoji: "🌍", color: "#C9A84C" },
+    { id: "a4", name: "Vizionar",    sub: "Puni potencijal",         emoji: "🚀", color: "#C9A84C" },
+    { id: "a5", name: "Filozof",     sub: "Tvoj pravi razlog",       emoji: "🧠", color: "#C9A84C" },
   ],
   en: [
-    { id: "a1", name: "Executor",      sub: "What to do right now",       emoji: "⚡", color: "#BF5AF2" },
-    { id: "a2", name: "Provocateur",   sub: "What could go wrong",        emoji: "🔥", color: "#FF375F" },
-    { id: "a3", name: "Outsider",      sub: "View from the outside",      emoji: "🌍", color: "#30B0C7" },
-    { id: "a4", name: "Visionary",     sub: "Think 10x bigger",           emoji: "🚀", color: "#34C759" },
-    { id: "a5", name: "Philosopher",   sub: "What is actually true",      emoji: "🧠", color: "#FF9F0A" },
+    { id: "a1", name: "Executor",      sub: "Your next move",             emoji: "⚡", color: "#C9A84C" },
+    { id: "a2", name: "Provocateur",   sub: "The reality check",          emoji: "🔥", color: "#C9A84C" },
+    { id: "a3", name: "Outsider",      sub: "The bird's-eye view",       emoji: "🌍", color: "#C9A84C" },
+    { id: "a4", name: "Visionary",     sub: "The 10x path",               emoji: "🚀", color: "#C9A84C" },
+    { id: "a5", name: "Philosopher",   sub: "The core truth",             emoji: "🧠", color: "#C9A84C" },
   ],
 };
 
@@ -83,10 +83,22 @@ function renderMd(text) {
   if (!text) return null;
   return text.split("\n").map((line, i) => {
     const isH = /^#+\s/.test(line);
+    const isNumbered = /^\d+\.\s/.test(line);
+    const isBullet = /^[-*]\s/.test(line);
     const html = line
       .replace(/^#+\s/, "")
+      .replace(/^\d+\.\s/, "")
+      .replace(/^[-*]\s/, "")
       .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
       .replace(/\*(.+?)\*/g, "<em>$1</em>");
+    if (isNumbered || isBullet) {
+      return (
+        <div key={i} style={{ display: "flex", gap: 8, margin: "0 0 5px", alignItems: "flex-start" }}>
+          <span style={{ color: "#C9A84C", fontSize: 16, lineHeight: "1.4", flexShrink: 0, marginTop: 1 }}>•</span>
+          <span dangerouslySetInnerHTML={{ __html: html }} />
+        </div>
+      );
+    }
     return (
       <p key={i} style={{ margin: "0 0 5px", fontWeight: isH ? 600 : 400 }}
         dangerouslySetInnerHTML={{ __html: html }} />
@@ -232,11 +244,11 @@ export default function Home() {
                 })}
 
                 {/* Final Verdict */}
-                <div style={{ background: "#fff", border: verdict ? `1px solid ${ACCENT}` : "0.5px solid rgba(0,0,0,0.1)", borderRadius: 14, padding: "16px 18px", boxShadow: verdict ? `0 0 0 3px ${ACCENT}12` : "0 1px 4px rgba(0,0,0,0.06)", minHeight: 120, display: "flex", flexDirection: "column", transition: "all 0.3s" }}>
+                <div style={{ background: verdict ? "linear-gradient(135deg, #FFFDF5, #FFF8E7)" : "#fff", border: verdict ? `1px solid ${ACCENT}` : "0.5px solid rgba(0,0,0,0.1)", borderRadius: 14, padding: "16px 18px", boxShadow: verdict ? `0 0 24px ${ACCENT}30, 0 0 0 1px ${ACCENT}20` : "0 1px 4px rgba(0,0,0,0.06)", minHeight: 120, display: "flex", flexDirection: "column", transition: "all 0.5s ease" }}>
                   <div style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 10 }}>
                     <span style={{ fontSize: 18 }}>⚖️</span>
                     <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 0.8, textTransform: "uppercase", color: ACCENT }}>Final Verdict</div>
+                      <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 0.8, textTransform: "uppercase", color: ACCENT }}>{lang === "hr" ? "Presuda" : "Verdict"}</div>
                       <div style={{ fontSize: 11, color: "#86868B", marginTop: 1 }}>{t.verdictSub}</div>
                     </div>
                     {verdictLoad && <div style={{ width: 7, height: 7, borderRadius: "50%", background: ACCENT, animation: "pulse 1s infinite", marginTop: 3 }} />}
