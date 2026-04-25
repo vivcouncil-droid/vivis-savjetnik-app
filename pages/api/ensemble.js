@@ -133,7 +133,7 @@ Tone: Expansive, optimistic, strategic.`;
   return d.candidates?.[0]?.content?.parts?.[0]?.text || "";
 }
 
-async function callGeminiSynthesis(claudePerspectives, openaiPerspectives, geminiPerspective, context, lang) {
+async function callClaudeSynthesis(claudePerspectives, openaiPerspectives, geminiPerspective, context, lang) {
   const isHr = lang === "hr";
   const prompt = `You are the Master Synthesizer. Three of the world's most advanced AI systems have analyzed a decision from different angles. Your task is to synthesize their perspectives into a single, cohesive, premium strategic Blueprint document.
 
@@ -193,14 +193,14 @@ ${isHr ? "[300 riječi. Sinteza svih perspektiva. Jedna jasna preporuka. Mudar, 
 
 ${isHr ? "Piši ISKLJUČIVO na hrvatskom jeziku, besprijekorno i prirodno. Ton: Premium konzultantski izvještaj. Autoritativan, smiren, precizan." : "Language: English. Tone: Premium consulting report. Authoritative, calm, precise."}`;
 
-  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GOOGLE_API_KEY}`, {
+  const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { maxOutputTokens: 6000 } }),
+    headers: { "Content-Type": "application/json", "x-api-key": process.env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
+    body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 6000, messages: [{ role: "user", content: prompt }] }),
   });
   const d = await res.json();
-  if (!res.ok || d.error) throw new Error("Gemini Synthesis: " + (d.error?.message || res.status));
-  return d.candidates?.[0]?.content?.parts?.[0]?.text || "";
+  if (!res.ok || d.type === "error") throw new Error("Claude Synthesis: " + (d.error?.message || res.status));
+  return d.content?.find(b => b.type === "text")?.text || "";
 }
 
 export default async function handler(req, res) {
@@ -215,7 +215,7 @@ export default async function handler(req, res) {
       callGemini(context, questions, answers, lang),
     ]);
 
-    const blueprint = await callGeminiSynthesis(claudeResp, openaiResp, geminiResp, context, lang);
+    const blueprint = await callClaudeSynthesis(claudeResp, openaiResp, geminiResp, context, lang);
 
     return res.status(200).json({
       blueprint,
