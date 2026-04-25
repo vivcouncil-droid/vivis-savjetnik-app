@@ -25,9 +25,10 @@ const LANGS = {
     deeperBtn: "Idemo dublje →",
     deeperSub: "Generiraj personalizirani Blueprint dokument",
     deeperTitle: "Želiš dublju analizu?",
-    step1Title: "Da bi Vijeće moglo donijeti pravu Presudu, trebamo znati više o tebi.",
-    step1Placeholder: "Npr. Razmišljam o otkazu jer želim više slobode, ali bojim se financijske nesigurnosti...",
+    step1Title: "Za preciznu Presudu, Vijeću je potrebno više konteksta.",
+    step1Placeholder: "Npr. Planiram lansirati novi projekt, ali nisam siguran u tajming... ili Razmišljam o otkazu jer želim više slobode...",
     step1Deadline: "Rok odluke",
+    step1Label: "Opiši nam situaciju, projekt ili dilemu",
     step1Values: "Što ti je najvažnije?",
     step1Btn: "Vijeće, analizirajte →",
     step2Title: "Vijeće ima 3 pitanja za tebe.",
@@ -42,7 +43,7 @@ const LANGS = {
     sendEmail: "Pošalji na email",
     savedOk: "✓ Otvoreno!",
     deadlineOpts: ["Danas", "Ovaj tjedan", "Bez roka"],
-    values: ["Obitelj", "Karijera", "Novac", "Sloboda", "Sigurnost", "Rast"],
+    values: ["Obitelj", "Karijera", "Novac", "Sloboda", "Sigurnost", "Rast", "Projekt", "Ideja", "Ostalo"],
   },
   en: {
     badge: "HelpMeDecide · AI",
@@ -64,9 +65,10 @@ const LANGS = {
     deeperBtn: "Go deeper →",
     deeperSub: "Generate your personalised Blueprint document",
     deeperTitle: "Want a deeper analysis?",
-    step1Title: "For the Council to deliver the right Verdict, we need to know more about you.",
-    step1Placeholder: "E.g. I'm thinking of quitting because I want more freedom, but I fear financial insecurity...",
+    step1Title: "For a precise Verdict, the Council needs more context.",
+    step1Placeholder: "E.g. I'm planning to launch a new project but I'm unsure about the timing... or I'm thinking of quitting because I want more freedom...",
     step1Deadline: "Decision deadline",
+    step1Label: "Describe the situation, project, or dilemma",
     step1Values: "What matters most to you?",
     step1Btn: "Council, analyse this →",
     step2Title: "The Council has 3 questions for you.",
@@ -81,7 +83,7 @@ const LANGS = {
     sendEmail: "Send to email",
     savedOk: "✓ Opened!",
     deadlineOpts: ["Today", "This week", "No deadline"],
-    values: ["Family", "Career", "Money", "Freedom", "Security", "Growth"],
+    values: ["Family", "Career", "Money", "Freedom", "Security", "Growth", "Project", "Idea", "Other"],
   },
 };
 
@@ -456,7 +458,7 @@ export default function Home() {
                     <p style={{ fontSize: 15, fontWeight: 600, margin: 0, color: "#1D1D1F", fontFamily: "'Playfair Display', serif" }}>{t.step1Title}</p>
                   </div>
 
-                  <p style={{ fontSize: 12, color: "#86868B", margin: "0 0 6px" }}>{t.step1Values}</p>
+                  <p style={{ fontSize: 12, color: "#86868B", margin: "0 0 6px" }}>{t.step1Label}</p>
                   <textarea value={deepContext.userProfile} onChange={(e) => setDeepContext(prev => ({ ...prev, userProfile: e.target.value }))} placeholder={t.step1Placeholder} rows={4}
                     style={{ width: "100%", boxSizing: "border-box", background: "#FAFAF7", border: "0.5px solid rgba(0,0,0,0.12)", borderRadius: 10, padding: "14px 16px", fontSize: 14, fontFamily: "Inter, sans-serif", color: "#1D1D1F", resize: "vertical", outline: "none", lineHeight: 1.6, marginBottom: 16 }} />
 
