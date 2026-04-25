@@ -45,7 +45,7 @@ Tone: Wise, empathetic, precise.`;
   return d.content?.find(b => b.type === "text")?.text || "";
 }
 
-async function callOpenAI(context, questions, answers, lang) {
+async function callClaudeExecutor(context, questions, answers, lang) {
   const isHr = lang === "hr";
   const prompt = isHr ? `Ti si dva vrhunska savjetnika: Operativac i Provokator. Pišeš isključivo na hrvatskom jeziku, besprijekorno i prirodno.
 
@@ -82,14 +82,14 @@ Generate sharp, logical analysis from two perspectives. Use **bold** for key con
 
 Tone: Direct, analytical, challenging.`;
 
-  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+  const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
-    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${process.env.OPENAI_API_KEY}` },
-    body: JSON.stringify({ model: "gpt-4o", max_tokens: 2000, messages: [{ role: "user", content: prompt }] }),
+    headers: { "Content-Type": "application/json", "x-api-key": process.env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
+    body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 2000, messages: [{ role: "user", content: prompt }] }),
   });
   const d = await res.json();
-  if (!res.ok || d.error) throw new Error("GPT-4o: " + (d.error?.message || res.status));
-  return d.choices?.[0]?.message?.content || "";
+  if (!res.ok || d.type === "error") throw new Error("Operativac/Provokator: " + (d.error?.message || res.status));
+  return d.content?.find(b => b.type === "text")?.text || "";
 }
 
 async function callGemini(context, questions, answers, lang) {
@@ -133,7 +133,7 @@ Tone: Expansive, optimistic, strategic.`;
   return d.content?.find(b => b.type === "text")?.text || "";
 }
 
-async function callClaudeSynthesis(claudePerspectives, openaiPerspectives, geminiPerspective, context, lang) {
+async function callClaudeSynthesis(claudePerspectives, executorPerspectives, visionaryPerspective, context, lang) {
   const isHr = lang === "hr";
   const prompt = `You are the Master Synthesizer. Three of the world's most advanced AI systems have analyzed a decision from different angles. Your task is to synthesize their perspectives into a single, cohesive, premium strategic Blueprint document.
 
@@ -145,10 +145,10 @@ CORE VALUES: ${context.coreValues?.join(", ")}
 ${claudePerspectives}
 
 === GPT-4o PERSPECTIVES (Logic, Risk Analysis, Concrete Steps) ===
-${openaiPerspectives}
+${executorPerspectives}
 
 === GEMINI 1.5 PRO PERSPECTIVE (Visionary Growth) ===
-${geminiPerspective}
+${visionaryPerspective}
 
 Now synthesize everything into this exact Markdown structure:
 
@@ -209,20 +209,20 @@ export default async function handler(req, res) {
   if (!context || !answers) return res.status(400).json({ error: "Nedostaju podaci" });
 
   try {
-    const [claudeResp, openaiResp, geminiResp] = await Promise.all([
+    const [claudeResp, executorResp, visionaryResp] = await Promise.all([
       callClaude(context, questions, answers, lang),
-      callOpenAI(context, questions, answers, lang),
+      callClaudeExecutor(context, questions, answers, lang),
       callGemini(context, questions, answers, lang),
     ]);
 
-    const blueprint = await callClaudeSynthesis(claudeResp, openaiResp, geminiResp, context, lang);
+    const blueprint = await callClaudeSynthesis(claudeResp, executorResp, visionaryResp, context, lang);
 
     return res.status(200).json({
       blueprint,
       models: {
-        claude: claudeResp,
-        openai: openaiResp,
-        gemini: geminiResp,
+        philosopher_outsider: claudeResp,
+        executor_provocateur: executorResp,
+        visionary: visionaryResp,
       },
     });
   } catch (err) {
