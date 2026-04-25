@@ -38,7 +38,7 @@ Tone: Wise, empathetic, precise.`;
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: { "Content-Type": "application/json", "x-api-key": process.env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
-    body: JSON.stringify({ model: "claude-sonnet-4-5-20251001", max_tokens: 2000, messages: [{ role: "user", content: prompt }] }),
+    body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 2000, messages: [{ role: "user", content: prompt }] }),
   });
   const d = await res.json();
   if (!res.ok || d.type === "error") throw new Error("Claude: " + (d.error?.message || res.status));
