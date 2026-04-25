@@ -76,6 +76,11 @@ export default function Blueprint() {
             </button>
           </div>
         </div>
+        <div style={{ marginTop: 48, paddingTop: 20, borderTop: "1px solid #F0E8DC", textAlign: "center" }}>
+          <p style={{ fontSize: 11, color: "#C4B89A", fontStyle: "italic", letterSpacing: 0.5, margin: 0 }}>
+            Synthesized by the collective intelligence of Claude 3.5, GPT&#8209;4o, and Gemini 1.5 Pro.
+          </p>
+        </div>
       </div>
     </>
   );
