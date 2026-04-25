@@ -123,14 +123,14 @@ Generate expansive visionary analysis. Use **bold** for key concepts.
 
 Tone: Expansive, optimistic, strategic.`;
 
-  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GOOGLE_API_KEY}`, {
+  const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { maxOutputTokens: 2000 } }),
+    headers: { "Content-Type": "application/json", "x-api-key": process.env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
+    body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 2000, messages: [{ role: "user", content: prompt }] }),
   });
   const d = await res.json();
-  if (!res.ok || d.error) throw new Error("Gemini: " + (d.error?.message || res.status));
-  return d.candidates?.[0]?.content?.parts?.[0]?.text || "";
+  if (!res.ok || d.type === "error") throw new Error("Vizionar (Claude): " + (d.error?.message || res.status));
+  return d.content?.find(b => b.type === "text")?.text || "";
 }
 
 async function callClaudeSynthesis(claudePerspectives, openaiPerspectives, geminiPerspective, context, lang) {
