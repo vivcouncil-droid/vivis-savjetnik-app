@@ -85,6 +85,8 @@ export default async function handler(req, res) {
   res.setHeader('X-XSS-Protection', '1; mode=block');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  res.setHeader('Content-Security-Policy', "default-src 'none'; frame-ancestors 'none'");
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
 
   const origin = req.headers.origin || '';
   const isLocalDev = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
