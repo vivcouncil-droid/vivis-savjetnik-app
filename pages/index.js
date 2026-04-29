@@ -333,6 +333,16 @@ export default function Home() {
         <meta name="apple-mobile-web-app-title" content="HelpMeDecide" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+        <link rel="icon" type="image/png" href="/favicon.png" />
+        <meta property="og:title" content="HelpMeDecide" />
+        <meta property="og:description" content="For the decisions that keep you up at night." />
+        <meta property="og:image" content="https://helpmedecide.to/og-image.png" />
+        <meta property="og:url" content="https://helpmedecide.to" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="HelpMeDecide" />
+        <meta name="twitter:description" content="For the decisions that keep you up at night." />
+        <meta name="twitter:image" content="https://helpmedecide.to/og-image.png" />
       </Head>
 
       <div style={{ minHeight: "100vh", background: "#FAFAF7", fontFamily: "Inter, sans-serif" }}>
@@ -536,26 +546,22 @@ export default function Home() {
                   )}
 
                   {blueprint && !deepLoading && (
-                    <>
-                      <div style={{ position: "relative", borderRadius: 10, overflow: "hidden", marginBottom: 16, border: `0.5px solid rgba(201,168,76,0.3)` }}>
-                        <div style={{ padding: "20px", filter: "blur(3px)", userSelect: "none", pointerEvents: "none", maxHeight: 280, overflow: "hidden" }}>
-                          <div style={{ fontSize: 11, color: ACCENT, letterSpacing: 2, textTransform: "uppercase", marginBottom: 8 }}>The Blueprint</div>
-                          <div style={{ fontSize: 13, color: "#333", lineHeight: 1.7 }}>{blueprint.slice(0, 400)}...</div>
-                        </div>
-                        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(255,253,245,0.4), rgba(255,253,245,0.85))", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 10 }}>
-                          <p style={{ fontSize: 13, color: "#86868B", margin: 0, fontStyle: "italic" }}>{t.blueprintReady}</p>
-                          <button onClick={openBlueprint} style={{ background: pdfSaved ? "#34C759" : ACCENT, color: "#fff", border: "none", borderRadius: 24, padding: "12px 28px", fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "Inter, sans-serif", transition: "all 0.3s" }}>
-                            {pdfSaved ? t.savedOk : t.savePdf}
-                          </button>
-                        </div>
+                    <div>
+                      <div style={{ fontSize: 13, lineHeight: 1.8, color: "#1D1D1F", marginBottom: 32 }}>
+                        {renderMd(blueprint)}
                       </div>
-                      <p style={{ fontSize: 12, color: "#C5C5C7", textAlign: "center", margin: 0 }}>
-                        {lang === "hr" ? "Blueprint se otvara u novom tabu — spremi ga kao PDF iz preglednika." : "Blueprint opens in a new tab — save it as PDF from your browser."}
-                      </p>
-                      <p style={{ fontSize: 11, color: "#D4B896", textAlign: "center", margin: "8px 0 0", fontStyle: "italic", letterSpacing: 0.3 }}>
-                        Synthesized by the collective intelligence of Claude 3.5, GPT‑4o, and Gemini 1.5 Pro.
-                      </p>
-                    </>
+                      <div style={{ borderTop: "1px solid rgba(201,168,76,0.2)", paddingTop: 24, display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
+                        <button onClick={openBlueprint} style={{ background: pdfSaved ? "#34C759" : ACCENT, color: "#fff", border: "none", borderRadius: 24, padding: "12px 36px", fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "Inter, sans-serif", transition: "all 0.3s" }}>
+                          {pdfSaved ? t.savedOk : t.savePdf}
+                        </button>
+                        <p style={{ fontSize: 11, color: "#C5C5C7", textAlign: "center", margin: 0 }}>
+                          {lang === "hr" ? "Otvara se u novom tabu — spremi kao PDF iz preglednika." : "Opens in a new tab — save as PDF from your browser."}
+                        </p>
+                        <p style={{ fontSize: 11, color: "#D4B896", fontStyle: "italic", margin: 0 }}>
+                          Synthesized by Claude Sonnet.
+                        </p>
+                      </div>
+                    </div>
                   )}
                 </div>
               )}

@@ -31,6 +31,12 @@ export default function Blueprint() {
     <>
       <Head>
         <title>Blueprint — HelpMeDecide</title>
+        <link rel="icon" type="image/png" href="/favicon.png" />
+        <meta property="og:title" content="My HelpMeDecide Blueprint" />
+        <meta property="og:description" content="A personalised strategic decision Blueprint." />
+        <meta property="og:image" content="https://helpmedecide.to/og-image.png" />
+        <meta property="og:url" content="https://helpmedecide.to" />
+        <meta name="twitter:card" content="summary_large_image" />
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
         <style>{`
           @media print {
