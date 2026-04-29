@@ -114,8 +114,10 @@ VAŽNO: Vrati ISKLJUČIVO validan JSON, bez ikakvog teksta prije ili poslije, be
 {"operativac":"odgovor","provokator":"odgovor","autsajder":"odgovor","vizionar":"odgovor","filozof":"odgovor"}
 Svaki odgovor max 120 riječi.`;
 
-const VERDICT_PROMPT = (summary) =>
-  `Na temelju ovih 5 perspektiva napiši kratak Final Verdict.\nStruktura:\n**Gdje se slažu:** (1-2 rečenice)\n**Ključni trade-off:** (1-2 rečenice)\n**Preporuka:** (1-2 konkretne akcije)\nMax 120 riječi. Odgovaraj na jeziku savjetnika.\n\n${summary}`;
+const VERDICT_PROMPT = (summary, lang) =>
+  lang === "en"
+    ? `Based on these 5 perspectives, write a brief Final Verdict.\nStructure:\n**Where they agree:** (1-2 sentences)\n**Key trade-off:** (1-2 sentences)\n**Recommendation:** (1-2 concrete actions)\nMax 120 words. Respond in English.\n\n${summary}`
+    : `Na temelju ovih 5 perspektiva napiši kratak Final Verdict.\nStruktura:\n**Gdje se slažu:** (1-2 rečenice)\n**Ključni trade-off:** (1-2 rečenice)\n**Preporuka:** (1-2 konkretne akcije)\nMax 120 riječi. Odgovaraj na hrvatskom.\n\n${summary}`;
 
 const CLASSIFY_PROMPT = (input) =>
   `Analyse this user input and return ONLY one of these three tags, nothing else, no punctuation:\nBUSINESS\nPERSONAL\nLOGISTICS\n\nUser input: ${input}`;
@@ -251,7 +253,7 @@ export default function Home() {
       setResp(newResp);
       setVerdictLoad(true);
       const summary = advisors.map((a) => `**${a.name}:** ${newResp[a.id]}`).join("\n\n");
-      const v = await apiCall("/api/ask", VERDICT_PROMPT(summary), 600);
+      const v = await apiCall("/api/ask", VERDICT_PROMPT(summary, lang), 600);
       setVerdict(v);
     } catch (e) {
       const err = "Greška: " + e.message;
